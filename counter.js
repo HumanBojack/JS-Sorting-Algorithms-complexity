@@ -2,7 +2,8 @@ const fs = require('fs');
 class Counter {
 	constructor() {
 		this.numbers = this.testData(this.getData(process.argv[2]));
-		this.bubbleSortComparaisons = 0;
+		this.bubbleComparaisons = 0;
+		this.insertionComparaisons = 0;
 	}
 
 	getData(fileName) {
@@ -39,9 +40,9 @@ class Counter {
 		while (arrayIsModified == true){
 			arrayIsModified = false;
 			for(let i = 1; i < numbers.length; i++){
-				this.bubbleSortComparaisons += 1;
+				this.bubbleComparaisons += 1;
 				if (numbers[i-1] > numbers[i]){
-					[numbers[i-1],numbers[i]] = [numbers[i],numbers[i-1]];
+					Counter.swap(numbers,i-1,i)
 					arrayIsModified = true;
 				}
 			}
@@ -50,10 +51,40 @@ class Counter {
 		return numbers;
 	}
 
+	insertionSort(){
+		let numbers = [...this.numbers];
+		let j;
+
+		for(let i = 1; i <= numbers.length; i++){
+			j = i - 1;
+			this.insertionComparaisons += 1;
+
+			if (numbers[j] > numbers[i]){
+				while(numbers[j] > numbers[i] && j >= 0){
+					this.insertionComparaisons += 1;
+					j--
+				}
+				j++
+				numbers.splice(j,0,numbers[i]); 
+				numbers.splice(i + 1,1);
+			}
+
+		}
+		return numbers
+	}
+
+	static swap(array,firstNb,secondNb){
+		[array[firstNb],array[secondNb]] = [array[secondNb],array[firstNb]];
+	}
+
 
 }
 
 c = new Counter
+console.log(c.numbers);
 
-console.log(c.bubbleSort());
-console.log(c.bubbleSortComparaisons)
+// console.log(c.bubbleSort());
+// console.log(c.bubbleComparaisons)
+
+// console.log(c.insertionSort());
+// console.log(c.insertionComparaisons)
