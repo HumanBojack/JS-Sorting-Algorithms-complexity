@@ -5,6 +5,7 @@ class Counter {
 		this.bubbleComparaisons = 0;
 		this.insertionComparaisons = 0;
 		this.selectionComparaisons = 0;
+		this.quickSortComparaisons = 0;
 	}
 
 	getData(fileName) {
@@ -89,10 +90,50 @@ class Counter {
 		return orderedNumbers
 	}
 
+	runQuickSort(){
+		return this.quickSort(this.numbers, 0, this.numbers.length)
+	}
+
+	// I had a bit of trouble to make quicksort. So i went and searched the internet (for a very long time) until i was
+	// able to understand it. Here are a few ressources that might help you if you struggle too. Note that it takes time
+	// and dedication to finally get it:
+	// https://youtu.be/Hoixgm4-P4M
+	// https://youtu.be/PgBzjlCcFvc
+	// https://www.geeksforgeeks.org/quick-sort/
+	// Because of that, the code below is not 100% mine.
+
+	quickSort(array, low, high){
+		if(low < high){
+			let pivot = this.partition(array, low, high); // Execute partition, which will sort numbers around the "low" index
+																									 // and returns a new pivot position. We sort from left to right and
+																									 // take low as pivot, but we could use something else (high is also used)
+			this.quickSort(array, low, pivot); // Use the method on the numbers on the left of the pivot
+			this.quickSort(array, pivot + 1, high); // Use the method on the numbers on the right of the pivot
+		}
+		return array;
+	}
+
+	partition(array, low, high){
+		let pivot = array[low];
+		let leftWall = low;
+
+		for(let i = low + 1; i <= high; i++){
+			this.quickSortComparaisons += 1;
+			if(array[i] <= pivot){
+				leftWall++;
+				Counter.swap(array,i,leftWall); // swap array[i] with leftWall
+			}
+		}
+
+		Counter.swap(array,low,leftWall); // swap pivot with leftWall
+
+		return leftWall;
+	}
+
 	static swap(array,firstNb,secondNb){
 		[array[firstNb],array[secondNb]] = [array[secondNb],array[firstNb]];
 	}
-
+		
 
 }
 
@@ -107,3 +148,6 @@ console.log(c.numbers);
 
 // console.log(c.selectionSort());
 // console.log(c.selectionComparaisons);
+
+// console.log(c.runQuickSort());
+// console.log(c.quickSortComparaisons);
