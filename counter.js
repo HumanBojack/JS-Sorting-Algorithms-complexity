@@ -4,6 +4,7 @@ class Counter {
 		this.numbers = this.testData(this.getData(process.argv[2]));
 		this.bubbleComparaisons = 0;
 		this.insertionComparaisons = 0;
+		this.selectionComparaisons = 0;
 	}
 
 	getData(fileName) {
@@ -73,6 +74,21 @@ class Counter {
 		return numbers
 	}
 
+	selectionSort(){
+		let numbers = [...this.numbers]
+		let smallestNumber;
+		let orderedNumbers = [];
+		
+		for(let i = 0; i < numbers.length + orderedNumbers.length; i++){
+			this.selectionComparaisons += 1;
+			smallestNumber = Math.min(...numbers);
+			orderedNumbers.push(smallestNumber);
+			numbers.splice(numbers.indexOf(smallestNumber),1);
+		}
+
+		return orderedNumbers
+	}
+
 	static swap(array,firstNb,secondNb){
 		[array[firstNb],array[secondNb]] = [array[secondNb],array[firstNb]];
 	}
@@ -88,3 +104,6 @@ console.log(c.numbers);
 
 // console.log(c.insertionSort());
 // console.log(c.insertionComparaisons)
+
+// console.log(c.selectionSort());
+// console.log(c.selectionComparaisons);
