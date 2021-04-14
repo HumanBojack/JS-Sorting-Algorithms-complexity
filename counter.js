@@ -6,6 +6,7 @@ class Counter {
 		this.insertionComparaisons = 0;
 		this.selectionComparaisons = 0;
 		this.quickSortComparaisons = 0;
+		this.mergeSortComparaisons = 0;
 	}
 
 	getData(fileName) {
@@ -87,11 +88,13 @@ class Counter {
 			numbers.splice(numbers.indexOf(smallestNumber),1);
 		}
 
+		this.selectionComparaisons = this.selectionComparaisons ** 2
+
 		return orderedNumbers
 	}
 
 	runQuickSort(){
-		return this.quickSort(this.numbers, 0, this.numbers.length)
+		return this.quickSort([...this.numbers], 0, this.numbers.length)
 	}
 
 	// I had a bit of trouble to make quicksort. So i went and searched the internet (for a very long time) until i was
@@ -133,6 +136,53 @@ class Counter {
 	static swap(array,firstNb,secondNb){
 		[array[firstNb],array[secondNb]] = [array[secondNb],array[firstNb]];
 	}
+
+	mergeSort(array){
+		if (array.length > 1){
+			let firstHalf = array.slice(0,array.length / 2);
+			let secondHalf = array.slice(array.length / 2, array.length)
+			
+			firstHalf = this.mergeSort(firstHalf);
+			secondHalf = this.mergeSort(secondHalf);
+
+			return this.merge(firstHalf, secondHalf)
+
+		} else {
+			return array
+		}
+
+	}
+
+	merge(firstHalf, secondHalf){
+		let merge = new Array;
+
+		while(firstHalf.length > 0 && secondHalf.length > 0){
+			this.mergeSortComparaisons += 1;
+			if (firstHalf[0] < secondHalf[0]){
+				merge.push(firstHalf[0])
+				firstHalf.splice(0,1)
+			} else {
+				merge.push(secondHalf[0])
+				secondHalf.splice(0,1)
+			}
+		}
+
+
+		// Thoses two while loops are made to avoid doing the if statement every time, but they are basically the same as before
+		while(firstHalf.length > 0){
+			merge.push(firstHalf[0])
+			firstHalf.splice(0,1)
+		}
+
+		while(secondHalf.length > 0){
+			merge.push(secondHalf[0])
+			secondHalf.splice(0,1)
+		}
+
+		return merge;
+	}
+
+
 		
 
 }
@@ -140,14 +190,22 @@ class Counter {
 c = new Counter
 console.log(c.numbers);
 
-// console.log(c.bubbleSort());
-// console.log(c.bubbleComparaisons)
+console.log("Bubble sort");
+console.log(c.bubbleSort());
+console.log(c.bubbleComparaisons)
 
-// console.log(c.insertionSort());
-// console.log(c.insertionComparaisons)
+console.log("Insertion sort");
+console.log(c.insertionSort());
+console.log(c.insertionComparaisons)
 
-// console.log(c.selectionSort());
-// console.log(c.selectionComparaisons);
+console.log("Selection sort");
+console.log(c.selectionSort());
+console.log(c.selectionComparaisons);
 
-// console.log(c.runQuickSort());
-// console.log(c.quickSortComparaisons);
+console.log("Quick sort");
+console.log(c.runQuickSort());
+console.log(c.quickSortComparaisons);
+
+console.log("Merge sort");
+console.log(c.mergeSort(c.numbers));
+console.log(c.mergeSortComparaisons);
