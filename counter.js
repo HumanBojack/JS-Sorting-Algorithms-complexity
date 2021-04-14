@@ -54,8 +54,8 @@ class Counter {
 		return numbers;
 	}
 
-	insertionSort(){
-		let numbers = [...this.numbers];
+	insertionSort(array = [...this.numbers], left = 1, right = this.numbers.length){
+		let numbers = [...array].slice(left - 1,right);
 		let j;
 
 		for(let i = 1; i <= numbers.length; i++){
@@ -63,7 +63,7 @@ class Counter {
 			this.insertionComparaisons += 1;
 
 			if (numbers[j] > numbers[i]){
-				while(numbers[j] > numbers[i] && j >= 0){
+				while(numbers[j] > numbers[i] && j > 0){
 					this.insertionComparaisons += 1;
 					j--
 				}
@@ -167,7 +167,6 @@ class Counter {
 			}
 		}
 
-
 		// Thoses two while loops are made to avoid doing the if statement every time, but they are basically the same as before
 		while(firstHalf.length > 0){
 			merge.push(firstHalf[0])
@@ -183,7 +182,26 @@ class Counter {
 	}
 
 
-		
+ // I spent a few hours (a bit less than 7 i think), i couldn't make it work, so i modified the code until it worked,
+ // but i don't know if it's still a timsort. At least the core principle is still there (i guess)
+	timSort(array, n){
+		let final = new Array;
+		let merge;
+		let insertions = new Array;
+		for(let i = 1; i < n; i += 32){ // 32 is the run size. This sorts subarrays
+			insertions.push(this.insertionSort(array, i, Math.min(i+31, n + 1)));
+		}
+
+		final = insertions[0]
+		for (let i = 1; i < insertions.length; i++){
+			final = this.merge(final, insertions[i])
+		}
+		return final
+	}
+
+	runTimSort(){
+		return this.timSort([...this.numbers], this.numbers.length)
+	}	
 
 }
 
@@ -209,3 +227,7 @@ console.log(c.quickSortComparaisons);
 console.log("Merge sort");
 console.log(c.mergeSort(c.numbers));
 console.log(c.mergeSortComparaisons);
+
+console.log(c.numbers)
+console.log("Hey");
+console.log(c.runTimSort());
